@@ -307,67 +307,47 @@ public class AstarAgent extends Agent {
     {
         // return an empty path
     	{
-        	Set<MapLocation> openList = new HashSet<MapLocation>();
+    		PriorityQueue<MapLocation> openList = new PriorityQueue<MapLocation>();
         	Set<MapLocation> closedList = new HashSet<MapLocation>();
+        	
         	start.g_score = 0;
         	start.f_score = start.g_score + h(start, goal);
         	openList.add(start);
         	
-        	//g[start] = 0;
-        	//f[start] = g[start] + h(start, goal)
-        	
-        	MapLocation current = start;
+        	MapLocation current = null;
         	MapLocation neighbor = null;
-        	MapLocation node;
         	float temp_g = 0;
         	
         	while(!openList.isEmpty())
         	{
+        		//remove invalid nodes from the list until first valid one is found
+        		while(openList.peek().est_cost == -1)
+        		{
+        			openList.remove();
+        		}
         		
+        		current = openList.poll();
         		
-        		
-        		//Get the MapLocation object with the smallest f_score in the open list
-        		MapLocation minNode = new MapLocation(0, 0, null, 0);
-        		minNode.f_score = Integer.MAX_VALUE;
-        		for (Iterator<MapLocation> it = openList.iterator(); it.hasNext(); ) {
-        			node = it.next();
-        	        if(current.equals(start) || minNode.f_score > node.f_score)
-        	        {
-        	        	minNode = node;
-        	        }
-        	    }
-        		
-	        	openList.remove(current);
 	        	closedList.add(current);
-	        	if (minNode != null)
-	        		current = minNode;
-	        	else
-	        		System.out.println("Unexpected error: current was null");
 	        	
         		//current = node w/ min f value in openList
         		if (current.equals(goal))
         		{
         			//reconstruct path & return it
-        			System.out.println("YAY, WE GOT TO THE GOAL!!!!");
+        			System.out.println("Goal found.\n");
         			return reconstructPath(current, start);
         		}
-        		
-        		else 
-            	{
-        			
-            	}
-        		
-        		
+        		        		
         		MapLocation[] neighborList = getNeighbor(current, xExtent, yExtent, resourceLocations);
 
         		for(int x = 0; x < neighborList.length && neighborList[x] != null; x++)
         		{
         			neighbor = neighborList[x];
+        			
         			if (closedList.contains(neighbor))
         			{
         				continue;
         			}
-        			
         			
         			temp_g = current.g_score + 1;
         			
@@ -379,6 +359,11 @@ public class AstarAgent extends Agent {
         				
         				if(!(openList.contains(neighbor)))
         				{
+        					openList.add(neighbor);
+        				}
+        				else
+        				{
+        					//somehow invalidate/remove the old one here
         					openList.add(neighbor);
         				}
         			}
