@@ -305,7 +305,6 @@ public class AstarAgent extends Agent {
      */
     private Stack<MapLocation> AstarSearch(MapLocation start, MapLocation goal, int xExtent, int yExtent, MapLocation enemyFootmanLoc, Set<MapLocation> resourceLocations)
     {
-        // return an empty path
     	{
     		PriorityQueue<MapLocation> openList = new PriorityQueue<MapLocation>();
         	Set<MapLocation> closedList = new HashSet<MapLocation>();
@@ -321,16 +320,14 @@ public class AstarAgent extends Agent {
         	while(!openList.isEmpty())
         	{
         		//remove invalid nodes from the list until first valid one is found
-        		while(openList.peek().est_cost == -1)
+        		while(openList.peek().f_score == -1)
         		{
         			openList.remove();
         		}
         		
         		current = openList.poll();
-        		
 	        	closedList.add(current);
 	        	
-        		//current = node w/ min f value in openList
         		if (current.equals(goal))
         		{
         			//reconstruct path & return it
@@ -368,19 +365,17 @@ public class AstarAgent extends Agent {
         				}
         			}
         		}
-        		for (Iterator<MapLocation> it = closedList.iterator(); it.hasNext(); ) {
-        			node = it.next();
-        	        System.out.println("Closed list contents: x= " + node.x + " y = " + node.y + " size = " + 
-        	        		closedList.size());
-        	    }
+        		
+//        		for (Iterator<MapLocation> it = closedList.iterator(); it.hasNext(); ) {
+//        			node = it.next();
+//        	        System.out.println("Closed list contents: x= " + node.x + " y = " + node.y + " size = " + 
+//        	        		closedList.size());
+//        	    }
         	}
         	
-            // return an empty path
-            //return new Stack<MapLocation>();
         }
     	
-    	
-    	
+    	//no path. Return empty path
         return new Stack<MapLocation>();
     }
 
