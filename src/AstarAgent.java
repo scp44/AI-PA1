@@ -46,6 +46,28 @@ public class AstarAgent extends Agent {
     	}
     }
     
+    class PriorityQueueList extends PriorityQueue<MapLocation>
+    {
+    	public PriorityQueueList(int initLength)
+    	{
+    		super(initLength, new OpenListCompare());
+    	}
+    	
+    	public boolean contains(MapLocation loc) {
+        	
+        	if (this.isEmpty()) 
+        		return false;
+        	Iterator<MapLocation> it = this.iterator();
+        	while (it.hasNext()) {
+        		MapLocation location = it.next();
+    			if(location.x == loc.x && location.y == loc.y) {
+    				return true;
+    			}
+    	    }
+        	return false;
+        }
+    }
+    
 
     Stack<MapLocation> path;
     int footmanID, townhallID, enemyFootmanID;
@@ -319,7 +341,7 @@ public class AstarAgent extends Agent {
     private Stack<MapLocation> AstarSearch(MapLocation start, MapLocation goal, int xExtent, int yExtent, MapLocation enemyFootmanLoc, Set<MapLocation> resourceLocations)
     {
     	{
-    		PriorityQueue<MapLocation> openList = new PriorityQueue<MapLocation>(0, new OpenListCompare());
+    		PriorityQueueList openList = new PriorityQueueList(1);
         	Set<MapLocation> closedList = new HashSet<MapLocation>();
         	
         	start.g_score = 0;
@@ -378,12 +400,6 @@ public class AstarAgent extends Agent {
         				}
         			}
         		}
-        		
-//        		for (Iterator<MapLocation> it = closedList.iterator(); it.hasNext(); ) {
-//        			node = it.next();
-//        	        System.out.println("Closed list contents: x= " + node.x + " y = " + node.y + " size = " + 
-//        	        		closedList.size());
-//        	    }
         	}
         	
         }
