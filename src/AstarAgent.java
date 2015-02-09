@@ -33,6 +33,19 @@ public class AstarAgent extends Agent {
         	return (this.x == ((MapLocation)location).x && this.y == ((MapLocation)location).y);
         }
     }
+    
+    class OpenListCompare implements Comparator<MapLocation>
+    {
+    	public int compare(MapLocation loc1, MapLocation loc2) {
+    		if (loc1.f_score < loc2.f_score)
+    			return -1;
+    		else if (loc1.f_score == loc2.f_score)
+    			return 0;
+    		else
+    			return 1;
+    	}
+    }
+    
 
     Stack<MapLocation> path;
     int footmanID, townhallID, enemyFootmanID;
@@ -306,7 +319,7 @@ public class AstarAgent extends Agent {
     private Stack<MapLocation> AstarSearch(MapLocation start, MapLocation goal, int xExtent, int yExtent, MapLocation enemyFootmanLoc, Set<MapLocation> resourceLocations)
     {
     	{
-    		PriorityQueue<MapLocation> openList = new PriorityQueue<MapLocation>();
+    		PriorityQueue<MapLocation> openList = new PriorityQueue<MapLocation>(0, new OpenListCompare());
         	Set<MapLocation> closedList = new HashSet<MapLocation>();
         	
         	start.g_score = 0;
