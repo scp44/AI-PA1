@@ -66,6 +66,28 @@ public class AstarAgent extends Agent {
     	    }
         	return false;
         }
+    	
+    	/**
+    	 * Removes the previous entry for the specified location and replaces
+    	 * it with the new one to the queue.
+    	 * 
+    	 * @param loc
+    	 */
+    	public void update(MapLocation loc)
+    	{
+    		if (this.isEmpty()) 
+        		return;
+        	Iterator<MapLocation> it = this.iterator();
+        	while (it.hasNext()) {
+        		MapLocation location = it.next();
+    			if(location.x == loc.x && location.y == loc.y) {
+    				this.remove(location);
+    				this.add(loc);
+    				return;
+    			}
+    	    }
+        	return;
+    	}
     }
     
 
@@ -355,6 +377,7 @@ public class AstarAgent extends Agent {
         	while(!openList.isEmpty())
         	{
         		//remove invalid nodes from the list until first valid one is found
+        		//may not need this function if all goes according to plan...
         		while(openList.peek().f_score == -1)
         		{
         			openList.remove();
@@ -395,8 +418,7 @@ public class AstarAgent extends Agent {
         				}
         				else
         				{
-        					//somehow invalidate/remove the old one here
-        					openList.add(neighbor);
+        					openList.update(neighbor);
         				}
         			}
         		}
