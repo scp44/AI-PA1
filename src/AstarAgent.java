@@ -424,42 +424,44 @@ public class AstarAgent extends Agent {
     {
     	MapLocation[] neighbors = new MapLocation[8];
     	int index = 0;
-    	if(current.x - 1 >= 0 && current.y - 1 >= 0 && !setContains(resourceLocations, 
+    	if(current.x - 1 >= 0 && current.y - 1 >= 0 && resourceLocations.contains( 
     			new MapLocation(current.x - 1, current.y - 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y - 1, current, 0);
 		}
-		if(current.x - 1 >= 0 && current.y >= 0 && !setContains(resourceLocations,
+		if(current.x - 1 >= 0 && current.y >= 0 && resourceLocations.contains( 
 				new MapLocation(current.x - 1, current.y, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y, current, 0);
 		}
-		if(current.x - 1 >= 0 && current.y + 1 < yExtent && !setContains(resourceLocations,
+		if(current.x - 1 >= 0 && current.y + 1 < yExtent && resourceLocations.contains( 
 				new MapLocation(current.x - 1, current.y + 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y + 1, current, 0);
 		}
-		if(current.x >= 0 && current.y - 1 >= 0 && !setContains(resourceLocations,
+		if(current.x >= 0 && current.y - 1 >= 0 && resourceLocations.contains( 
 				new MapLocation(current.x, current.y - 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x, current.y - 1, current, 0);
 		}
-		if(current.x >= 0 && current.y + 1 < yExtent && !setContains(resourceLocations,
+		if(current.x >= 0 && current.y + 1 < yExtent && resourceLocations.contains( 
 				new MapLocation(current.x, current.y + 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x, current.y + 1, current, 0);
 		}
-		if(current.x + 1 < xExtent && current.y - 1 >= 0 && !setContains(resourceLocations,
+		if(current.x + 1 < xExtent && current.y - 1 >= 0 && resourceLocations.contains( 
 				new MapLocation(current.x + 1, current.y - 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y - 1, current, 0);
 		}
-		if(current.x + 1 < xExtent && current.y >= 0 && !setContains(resourceLocations,
+		if(current.x + 1 < xExtent && current.y >= 0 && resourceLocations.contains( 
 				new MapLocation(current.x + 1, current.y, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y, current, 0);
 		}
-		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && !setContains(resourceLocations,
+		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && resourceLocations.contains( 
 				new MapLocation(current.x + 1, current.y + 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y + 1, current, 0);
 		}
 		return neighbors;
     }
     
-    private boolean setContains(Set<MapLocation> set, MapLocation loc) {
+    
+    //Obselete method 
+    /*private boolean setContains(Set<MapLocation> set, MapLocation loc) {
     	
     	if (set.isEmpty()) 
     		return false;
@@ -471,7 +473,7 @@ public class AstarAgent extends Agent {
 			}
 	    }
     	return false;
-    }
+    }*/
     /**
      * Primitive actions take a direction (e.g. NORTH, NORTHEAST, etc)
      * This converts the difference between the current position and the
