@@ -455,35 +455,35 @@ public class AstarAgent extends Agent {
     {
     	MapLocation[] neighbors = new MapLocation[8];
     	int index = 0;
-    	if(current.x - 1 >= 0 && current.y - 1 >= 0 && resourceLocations.contains( 
+    	if(current.x - 1 >= 0 && current.y - 1 >= 0 && !resourceLocations.contains( 
     			new MapLocation(current.x - 1, current.y - 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y - 1, current, 0);
 		}
-		if(current.x - 1 >= 0 && current.y >= 0 && resourceLocations.contains( 
+		if(current.x - 1 >= 0 && current.y >= 0 && !resourceLocations.contains( 
 				new MapLocation(current.x - 1, current.y, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y, current, 0);
 		}
-		if(current.x - 1 >= 0 && current.y + 1 < yExtent && resourceLocations.contains( 
+		if(current.x - 1 >= 0 && current.y + 1 < yExtent && !resourceLocations.contains( 
 				new MapLocation(current.x - 1, current.y + 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y + 1, current, 0);
 		}
-		if(current.x >= 0 && current.y - 1 >= 0 && resourceLocations.contains( 
+		if(current.x >= 0 && current.y - 1 >= 0 && !resourceLocations.contains( 
 				new MapLocation(current.x, current.y - 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x, current.y - 1, current, 0);
 		}
-		if(current.x >= 0 && current.y + 1 < yExtent && resourceLocations.contains( 
+		if(current.x >= 0 && current.y + 1 < yExtent && !resourceLocations.contains( 
 				new MapLocation(current.x, current.y + 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x, current.y + 1, current, 0);
 		}
-		if(current.x + 1 < xExtent && current.y - 1 >= 0 && resourceLocations.contains( 
+		if(current.x + 1 < xExtent && current.y - 1 >= 0 && !resourceLocations.contains( 
 				new MapLocation(current.x + 1, current.y - 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y - 1, current, 0);
 		}
-		if(current.x + 1 < xExtent && current.y >= 0 && resourceLocations.contains( 
+		if(current.x + 1 < xExtent && current.y >= 0 && !resourceLocations.contains( 
 				new MapLocation(current.x + 1, current.y, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y, current, 0);
 		}
-		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && resourceLocations.contains( 
+		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && !resourceLocations.contains( 
 				new MapLocation(current.x + 1, current.y + 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y + 1, current, 0);
 		}
