@@ -28,18 +28,43 @@ public class AstarAgent extends Agent {
             this.y = y;
         }
         @Override
-        public boolean equals(Object location) 
-        {
-        	return (this.x == ((MapLocation)location).x && this.y == ((MapLocation)location).y);
-        }
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (!(obj instanceof MapLocation)) {
+				return false;
+			}
+			MapLocation other = (MapLocation) obj;
+			if (!getOuterType().equals(other.getOuterType())) {
+				return false;
+			}
+			if (x != other.x) {
+				return false;
+			}
+			if (y != other.y) {
+				return false;
+			}
+			return true;
+		}
+        
+        @Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + x;
+			result = prime * result + y;
+			return result;
+		}
+		private AstarAgent getOuterType() {
+			return AstarAgent.this;
+		}
     }
 
-    /*class MyHashSet<MapLocation> extends HashSet<MapLocation> {
-    	public boolean equals(Object location) 
-        {
-        	return (this.x == ((MapLocation)location).x && this.y == ((MapLocation)location).y);
-        }
-    }*/
     
     class OpenListCompare implements Comparator<MapLocation>
     {
@@ -469,35 +494,35 @@ public class AstarAgent extends Agent {
     {
     	MapLocation[] neighbors = new MapLocation[8];
     	int index = 0;
-    	if(current.x - 1 >= 0 && current.y - 1 >= 0 && !setContains(resourceLocations, 
+    	if(current.x - 1 >= 0 && current.y - 1 >= 0 && !resourceLocations.contains(
     			new MapLocation(current.x - 1, current.y - 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y - 1, current, current.g_score + 1);
 		}
-		if(current.x - 1 >= 0 && current.y >= 0 && !setContains(resourceLocations, 
+		if(current.x - 1 >= 0 && current.y >= 0 && !resourceLocations.contains( 
 				new MapLocation(current.x - 1, current.y, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y, current, current.g_score + 1);
 		}
-		if(current.x - 1 >= 0 && current.y + 1 < yExtent && !setContains(resourceLocations, 
+		if(current.x - 1 >= 0 && current.y + 1 < yExtent && !resourceLocations.contains(
 				new MapLocation(current.x - 1, current.y + 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y + 1, current, current.g_score + 1);
 		}
-		if(current.x >= 0 && current.y - 1 >= 0 && !setContains(resourceLocations, 
+		if(current.x >= 0 && current.y - 1 >= 0 && !resourceLocations.contains(
 				new MapLocation(current.x, current.y - 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x, current.y - 1, current, current.g_score + 1);
 		}
-		if(current.x >= 0 && current.y + 1 < yExtent && !setContains(resourceLocations,
+		if(current.x >= 0 && current.y + 1 < yExtent && !resourceLocations.contains(
 				new MapLocation(current.x, current.y + 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x, current.y + 1, current, current.g_score + 1);
 		}
-		if(current.x + 1 < xExtent && current.y - 1 >= 0 && !setContains(resourceLocations,
+		if(current.x + 1 < xExtent && current.y - 1 >= 0 && !resourceLocations.contains(
 				new MapLocation(current.x + 1, current.y - 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y - 1, current, current.g_score + 1);
 		}
-		if(current.x + 1 < xExtent && current.y >= 0 && !setContains(resourceLocations,
+		if(current.x + 1 < xExtent && current.y >= 0 && !resourceLocations.contains(
 				new MapLocation(current.x + 1, current.y, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y, current, current.g_score + 1);
 		}
-		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && !setContains(resourceLocations,
+		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && !resourceLocations.contains(
 				new MapLocation(current.x + 1, current.y + 1, null, 0))) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y + 1, current, current.g_score + 1);
 		}
@@ -506,7 +531,7 @@ public class AstarAgent extends Agent {
     
     
     //Obselete method 
-    private boolean setContains(Set<MapLocation> set, MapLocation loc) {
+    /*private boolean setContains(Set<MapLocation> set, MapLocation loc) {
     	
     	if (set.isEmpty()) 
     		return false;
@@ -518,7 +543,7 @@ public class AstarAgent extends Agent {
 			}
 	    }
     	return false;
-    }
+    }*/
     /**
      * Primitive actions take a direction (e.g. NORTH, NORTHEAST, etc)
      * This converts the difference between the current position and the
