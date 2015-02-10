@@ -33,6 +33,13 @@ public class AstarAgent extends Agent {
         	return (this.x == ((MapLocation)location).x && this.y == ((MapLocation)location).y);
         }
     }
+
+    /*class MyHashSet<MapLocation> extends HashSet<MapLocation> {
+    	public boolean equals(Object location) 
+        {
+        	return (this.x == ((MapLocation)location).x && this.y == ((MapLocation)location).y);
+        }
+    }*/
     
     class OpenListCompare implements Comparator<MapLocation>
     {
@@ -305,7 +312,7 @@ public class AstarAgent extends Agent {
 
         // get resource locations
         List<Integer> resourceIDs = state.getAllResourceIds();
-        Set<MapLocation> resourceLocations = new HashSet<MapLocation>();
+        HashSet<MapLocation> resourceLocations = new HashSet<MapLocation>();
         for(Integer resourceID : resourceIDs)
         {
             ResourceNode.ResourceView resource = state.getResourceNode(resourceID);
@@ -360,7 +367,7 @@ public class AstarAgent extends Agent {
      * @param resourceLocations Set of positions occupied by resources
      * @return Stack of positions with top of stack being first move in plan
      */
-    private Stack<MapLocation> AstarSearch(MapLocation start, MapLocation goal, int xExtent, int yExtent, MapLocation enemyFootmanLoc, Set<MapLocation> resourceLocations)
+    private Stack<MapLocation> AstarSearch(MapLocation start, MapLocation goal, int xExtent, int yExtent, MapLocation enemyFootmanLoc, HashSet<MapLocation> resourceLocations)
     {
     	{
     		PriorityQueueList openList = new PriorityQueueList(1);
@@ -390,7 +397,14 @@ public class AstarAgent extends Agent {
         		{
         			//reconstruct path & return it
         			System.out.println("Goal found.\n");
-        			return reconstructPath(current, start);
+        			
+        			Stack<MapLocation> foundPath = reconstructPath(current, start);
+        			Iterator<MapLocation> pathIter = foundPath.iterator();
+                	while (pathIter.hasNext()) {
+                		MapLocation location = pathIter.next();
+            			System.out.println("(" + location.x + ", " + location.y + ")");
+            	    }
+                	return foundPath;
         		}
         		        		
         		MapLocation[] neighborList = getNeighbor(current, xExtent, yExtent, resourceLocations);
@@ -455,44 +469,44 @@ public class AstarAgent extends Agent {
     {
     	MapLocation[] neighbors = new MapLocation[8];
     	int index = 0;
-    	if(current.x - 1 >= 0 && current.y - 1 >= 0 && !resourceLocations.contains( 
+    	if(current.x - 1 >= 0 && current.y - 1 >= 0 && !setContains(resourceLocations, 
     			new MapLocation(current.x - 1, current.y - 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x - 1, current.y - 1, current, 0);
+			neighbors[index++] = new MapLocation(current.x - 1, current.y - 1, current, current.g_score + 1);
 		}
-		if(current.x - 1 >= 0 && current.y >= 0 && !resourceLocations.contains( 
+		if(current.x - 1 >= 0 && current.y >= 0 && !setContains(resourceLocations, 
 				new MapLocation(current.x - 1, current.y, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x - 1, current.y, current, 0);
+			neighbors[index++] = new MapLocation(current.x - 1, current.y, current, current.g_score + 1);
 		}
-		if(current.x - 1 >= 0 && current.y + 1 < yExtent && !resourceLocations.contains( 
+		if(current.x - 1 >= 0 && current.y + 1 < yExtent && !setContains(resourceLocations, 
 				new MapLocation(current.x - 1, current.y + 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x - 1, current.y + 1, current, 0);
+			neighbors[index++] = new MapLocation(current.x - 1, current.y + 1, current, current.g_score + 1);
 		}
-		if(current.x >= 0 && current.y - 1 >= 0 && !resourceLocations.contains( 
+		if(current.x >= 0 && current.y - 1 >= 0 && !setContains(resourceLocations, 
 				new MapLocation(current.x, current.y - 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x, current.y - 1, current, 0);
+			neighbors[index++] = new MapLocation(current.x, current.y - 1, current, current.g_score + 1);
 		}
-		if(current.x >= 0 && current.y + 1 < yExtent && !resourceLocations.contains( 
+		if(current.x >= 0 && current.y + 1 < yExtent && !setContains(resourceLocations,
 				new MapLocation(current.x, current.y + 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x, current.y + 1, current, 0);
+			neighbors[index++] = new MapLocation(current.x, current.y + 1, current, current.g_score + 1);
 		}
-		if(current.x + 1 < xExtent && current.y - 1 >= 0 && !resourceLocations.contains( 
+		if(current.x + 1 < xExtent && current.y - 1 >= 0 && !setContains(resourceLocations,
 				new MapLocation(current.x + 1, current.y - 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x + 1, current.y - 1, current, 0);
+			neighbors[index++] = new MapLocation(current.x + 1, current.y - 1, current, current.g_score + 1);
 		}
-		if(current.x + 1 < xExtent && current.y >= 0 && !resourceLocations.contains( 
+		if(current.x + 1 < xExtent && current.y >= 0 && !setContains(resourceLocations,
 				new MapLocation(current.x + 1, current.y, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x + 1, current.y, current, 0);
+			neighbors[index++] = new MapLocation(current.x + 1, current.y, current, current.g_score + 1);
 		}
-		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && !resourceLocations.contains( 
+		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && !setContains(resourceLocations,
 				new MapLocation(current.x + 1, current.y + 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x + 1, current.y + 1, current, 0);
+			neighbors[index++] = new MapLocation(current.x + 1, current.y + 1, current, current.g_score + 1);
 		}
 		return neighbors;
     }
     
     
     //Obselete method 
-    /*private boolean setContains(Set<MapLocation> set, MapLocation loc) {
+    private boolean setContains(Set<MapLocation> set, MapLocation loc) {
     	
     	if (set.isEmpty()) 
     		return false;
@@ -504,7 +518,7 @@ public class AstarAgent extends Agent {
 			}
 	    }
     	return false;
-    }*/
+    }
     /**
      * Primitive actions take a direction (e.g. NORTH, NORTHEAST, etc)
      * This converts the difference between the current position and the
