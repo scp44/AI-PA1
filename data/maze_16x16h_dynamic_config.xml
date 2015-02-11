@@ -14,7 +14,7 @@
   </Player>
   <Player Id="1">
     <AgentClass>
-      <ClassName>EnemyBlockerAgent</ClassName>
+      <ClassName>edu.cwru.sepia.agent.EnemyBlockerAgent</ClassName>
     </AgentClass>
   </Player>
   <ModelParameters>

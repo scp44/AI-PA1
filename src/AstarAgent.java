@@ -315,6 +315,8 @@ public class AstarAgent extends Agent {
     	//if((enemy is on our path) && (enemy is within 3 steps of us))
     		//recalculate = true;
     	
+    	
+    	
         return recalculate;
     }
 
