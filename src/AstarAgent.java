@@ -18,12 +18,12 @@ public class AstarAgent extends Agent {
     {
         public int x, y;
         MapLocation cameFrom;
-        public float f_score, g_score;
+        public float estTotalCost, cost;
 
         public MapLocation(int x, int y, MapLocation cameFrom, float g_score)
         {
         	this.cameFrom = cameFrom;
-        	this.g_score = g_score;
+        	this.cost = g_score;
             this.x = x;
             this.y = y;
         }
@@ -69,9 +69,9 @@ public class AstarAgent extends Agent {
     class OpenListCompare implements Comparator<MapLocation>
     {
     	public int compare(MapLocation loc1, MapLocation loc2) {
-    		if (loc1.f_score < loc2.f_score)
+    		if (loc1.estTotalCost < loc2.estTotalCost)
     			return -1;
-    		else if (loc1.f_score == loc2.f_score)
+    		else if (loc1.estTotalCost == loc2.estTotalCost)
     			return 0;
     		else
     			return 1;
@@ -398,8 +398,8 @@ public class AstarAgent extends Agent {
     		PriorityQueueList openList = new PriorityQueueList(1);
         	Set<MapLocation> closedList = new HashSet<MapLocation>();
         	
-        	start.g_score = 0;
-        	start.f_score = start.g_score + h(start, goal);
+        	start.cost = 0;
+        	start.estTotalCost = start.cost + heuristic(start, goal);
         	openList.add(start);
         	
         	MapLocation current = null;
@@ -410,7 +410,7 @@ public class AstarAgent extends Agent {
         	{
         		//remove invalid nodes from the list until first valid one is found
         		//may not need this function if all goes according to plan...
-        		while(openList.peek().f_score == -1)
+        		while(openList.peek().estTotalCost == -1)
         		{
         			openList.remove();
         		}
@@ -443,13 +443,13 @@ public class AstarAgent extends Agent {
         				continue;
         			}
         			
-        			temp_g = current.g_score + 1;
+        			temp_g = current.cost + 1;
         			
-        			if(!(openList.contains(neighbor)) || temp_g < neighbor.g_score )
+        			if(!(openList.contains(neighbor)) || temp_g < neighbor.cost )
         			{
         				neighbor.cameFrom = current;
-        				neighbor.g_score = temp_g;
-        				neighbor.f_score = neighbor.g_score + h(neighbor, goal);
+        				neighbor.cost = temp_g;
+        				neighbor.estTotalCost = neighbor.cost + heuristic(neighbor, goal);
         				
         				if(!(openList.contains(neighbor)))
         				{
@@ -483,7 +483,7 @@ public class AstarAgent extends Agent {
     	return path;
     }
     
-    private int h(MapLocation current, MapLocation goal)
+    private int heuristic(MapLocation current, MapLocation goal)
     {
     	int distance = 0;
     	distance = Math.max(Math.abs(goal.x-current.x), Math.abs(goal.y-current.y));
@@ -496,35 +496,35 @@ public class AstarAgent extends Agent {
     	int index = 0;
     	if(current.x - 1 >= 0 && current.y - 1 >= 0 && !resourceLocations.contains(
     			new MapLocation(current.x - 1, current.y - 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x - 1, current.y - 1, current, current.g_score + 1);
+			neighbors[index++] = new MapLocation(current.x - 1, current.y - 1, current, current.cost + 1);
 		}
 		if(current.x - 1 >= 0 && current.y >= 0 && !resourceLocations.contains( 
 				new MapLocation(current.x - 1, current.y, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x - 1, current.y, current, current.g_score + 1);
+			neighbors[index++] = new MapLocation(current.x - 1, current.y, current, current.cost + 1);
 		}
 		if(current.x - 1 >= 0 && current.y + 1 < yExtent && !resourceLocations.contains(
 				new MapLocation(current.x - 1, current.y + 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x - 1, current.y + 1, current, current.g_score + 1);
+			neighbors[index++] = new MapLocation(current.x - 1, current.y + 1, current, current.cost + 1);
 		}
 		if(current.x >= 0 && current.y - 1 >= 0 && !resourceLocations.contains(
 				new MapLocation(current.x, current.y - 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x, current.y - 1, current, current.g_score + 1);
+			neighbors[index++] = new MapLocation(current.x, current.y - 1, current, current.cost + 1);
 		}
 		if(current.x >= 0 && current.y + 1 < yExtent && !resourceLocations.contains(
 				new MapLocation(current.x, current.y + 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x, current.y + 1, current, current.g_score + 1);
+			neighbors[index++] = new MapLocation(current.x, current.y + 1, current, current.cost + 1);
 		}
 		if(current.x + 1 < xExtent && current.y - 1 >= 0 && !resourceLocations.contains(
 				new MapLocation(current.x + 1, current.y - 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x + 1, current.y - 1, current, current.g_score + 1);
+			neighbors[index++] = new MapLocation(current.x + 1, current.y - 1, current, current.cost + 1);
 		}
 		if(current.x + 1 < xExtent && current.y >= 0 && !resourceLocations.contains(
 				new MapLocation(current.x + 1, current.y, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x + 1, current.y, current, current.g_score + 1);
+			neighbors[index++] = new MapLocation(current.x + 1, current.y, current, current.cost + 1);
 		}
 		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && !resourceLocations.contains(
 				new MapLocation(current.x + 1, current.y + 1, null, 0))) {
-			neighbors[index++] = new MapLocation(current.x + 1, current.y + 1, current, current.g_score + 1);
+			neighbors[index++] = new MapLocation(current.x + 1, current.y + 1, current, current.cost + 1);
 		}
 		return neighbors;
     }
