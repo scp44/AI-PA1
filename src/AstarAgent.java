@@ -312,8 +312,7 @@ public class AstarAgent extends Agent {
     {
     	boolean recalculate = false;
     	
-    	//what cases should we recalculate for? Whenever the enemy steps into the currentPath?
-    	//if(some kind of sorcery)
+    	//if((enemy is on our path) && (enemy is within 3 steps of us))
     		//recalculate = true;
     	
         return recalculate;
