@@ -310,7 +310,13 @@ public class AstarAgent extends Agent {
      */
     private boolean shouldReplanPath(State.StateView state, History.HistoryView history, Stack<MapLocation> currentPath)
     {
-        return false;
+    	boolean recalculate = false;
+    	
+    	//what cases should we recalculate for? Whenever the enemy steps into the currentPath?
+    	//if(some kind of sorcery)
+    		//recalculate = true;
+    	
+        return recalculate;
     }
 
     /**
