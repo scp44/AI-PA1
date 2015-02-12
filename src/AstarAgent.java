@@ -310,14 +310,28 @@ public class AstarAgent extends Agent {
      */
     private boolean shouldReplanPath(State.StateView state, History.HistoryView history, Stack<MapLocation> currentPath)
     {
-    	boolean recalculate = false;
+    	Unit.UnitView footmanUnit = state.getUnit(footmanID);
+    	Unit.UnitView enemyUnit = null;
+    	if(enemyFootmanID != -1) {
+    		enemyUnit = state.getUnit(enemyFootmanID);
+    	}
+    	MapLocation enemyLoc = new MapLocation(enemyUnit.getXPosition(), enemyUnit.getYPosition(), null, 0);
+    	
+    	Iterator<MapLocation> it = currentPath.iterator();
+    	while (it.hasNext()) {
+    		MapLocation location = it.next();
+			if(location.x == enemyLoc.x && location.y == enemyLoc.y && 
+					Math.abs(footmanUnit.getXPosition() - enemyUnit.getXPosition()) <= 3 &&
+					Math.abs(footmanUnit.getYPosition() - enemyUnit.getYPosition()) <= 3) {
+				return true;
+			}
+	    }
+    	return false;
     	
     	//if((enemy is on our path) && (enemy is within 3 steps of us))
     		//recalculate = true;
-    	
-    	
-    	
-        return recalculate;
+    	//return true;
+
     }
 
     /**
@@ -439,7 +453,7 @@ public class AstarAgent extends Agent {
                 	return foundPath;
         		}
         		        		
-        		MapLocation[] neighborList = getNeighbor(current, xExtent, yExtent, resourceLocations);
+        		MapLocation[] neighborList = getNeighbor(current, xExtent, yExtent, resourceLocations, enemyFootmanLoc);
 
         		for(int x = 0; x < neighborList.length && neighborList[x] != null; x++)
         		{
@@ -497,40 +511,48 @@ public class AstarAgent extends Agent {
     	return distance;
     }
     
-    private MapLocation[] getNeighbor(MapLocation current, int xExtent, int yExtent, Set<MapLocation> resourceLocations) 
+    private MapLocation[] getNeighbor(MapLocation current, int xExtent, int yExtent, Set<MapLocation> resourceLocations, MapLocation enemyFootmanLoc) 
     {
     	MapLocation[] neighbors = new MapLocation[8];
     	int index = 0;
     	if(current.x - 1 >= 0 && current.y - 1 >= 0 && !resourceLocations.contains(
-    			new MapLocation(current.x - 1, current.y - 1, null, 0))) {
+    			new MapLocation(current.x - 1, current.y - 1, null, 0)) && !(enemyFootmanLoc.x == current.x - 1
+    			&& enemyFootmanLoc.y == current.y - 1)) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y - 1, current, current.cost + 1);
 		}
 		if(current.x - 1 >= 0 && current.y >= 0 && !resourceLocations.contains( 
-				new MapLocation(current.x - 1, current.y, null, 0))) {
+				new MapLocation(current.x - 1, current.y, null, 0)) && !(enemyFootmanLoc.x == current.x - 1
+    			&& enemyFootmanLoc.y == current.y)) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y, current, current.cost + 1);
 		}
 		if(current.x - 1 >= 0 && current.y + 1 < yExtent && !resourceLocations.contains(
-				new MapLocation(current.x - 1, current.y + 1, null, 0))) {
+				new MapLocation(current.x - 1, current.y + 1, null, 0)) && !(enemyFootmanLoc.x == current.x - 1
+    			&& enemyFootmanLoc.y == current.y + 1)) {
 			neighbors[index++] = new MapLocation(current.x - 1, current.y + 1, current, current.cost + 1);
 		}
 		if(current.x >= 0 && current.y - 1 >= 0 && !resourceLocations.contains(
-				new MapLocation(current.x, current.y - 1, null, 0))) {
+				new MapLocation(current.x, current.y - 1, null, 0)) && !(enemyFootmanLoc.x == current.x
+    			&& enemyFootmanLoc.y == current.y - 1)) {
 			neighbors[index++] = new MapLocation(current.x, current.y - 1, current, current.cost + 1);
 		}
 		if(current.x >= 0 && current.y + 1 < yExtent && !resourceLocations.contains(
-				new MapLocation(current.x, current.y + 1, null, 0))) {
+				new MapLocation(current.x, current.y + 1, null, 0)) && !(enemyFootmanLoc.x == current.x
+    			&& enemyFootmanLoc.y == current.y + 1)) {
 			neighbors[index++] = new MapLocation(current.x, current.y + 1, current, current.cost + 1);
 		}
 		if(current.x + 1 < xExtent && current.y - 1 >= 0 && !resourceLocations.contains(
-				new MapLocation(current.x + 1, current.y - 1, null, 0))) {
+				new MapLocation(current.x + 1, current.y - 1, null, 0)) && !(enemyFootmanLoc.x == current.x + 1
+    			&& enemyFootmanLoc.y == current.y - 1)) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y - 1, current, current.cost + 1);
 		}
 		if(current.x + 1 < xExtent && current.y >= 0 && !resourceLocations.contains(
-				new MapLocation(current.x + 1, current.y, null, 0))) {
+				new MapLocation(current.x + 1, current.y, null, 0)) && !(enemyFootmanLoc.x == current.x + 1
+    			&& enemyFootmanLoc.y == current.y)) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y, current, current.cost + 1);
 		}
 		if(current.x + 1 < xExtent && current.y + 1 <= yExtent && !resourceLocations.contains(
-				new MapLocation(current.x + 1, current.y + 1, null, 0))) {
+				new MapLocation(current.x + 1, current.y + 1, null, 0)) && !(enemyFootmanLoc.x == current.x + 1
+    			&& enemyFootmanLoc.y == current.y + 1)) {
 			neighbors[index++] = new MapLocation(current.x + 1, current.y + 1, current, current.cost + 1);
 		}
 		return neighbors;
